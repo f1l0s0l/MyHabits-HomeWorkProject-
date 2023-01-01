@@ -15,6 +15,7 @@
 		A443CB62295B21A6006F8082 /* HabitsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A443CB61295B21A6006F8082 /* HabitsViewController.swift */; };
 		A443CB64295B21C7006F8082 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A443CB63295B21C7006F8082 /* InfoViewController.swift */; };
 		A443CB68295B35AF006F8082 /* HabitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A443CB67295B35AF006F8082 /* HabitViewController.swift */; };
+		A4623103295F190E00C84570 /* HabitDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4623102295F190E00C84570 /* HabitDate.swift */; };
 		A4AFE8F8295DA119000D2895 /* HabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AFE8F7295DA119000D2895 /* HabitCollectionViewCell.swift */; };
 		A4AFE8FA295DB1BB000D2895 /* ProgresHabitCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AFE8F9295DB1BA000D2895 /* ProgresHabitCollectionViewCell.swift */; };
 		A4AFE901295DC23B000D2895 /* HabitDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A4AFE900295DC23B000D2895 /* HabitDetailsViewController.swift */; };
@@ -31,6 +32,7 @@
 		A443CB61295B21A6006F8082 /* HabitsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitsViewController.swift; sourceTree = "<group>"; };
 		A443CB63295B21C7006F8082 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		A443CB67295B35AF006F8082 /* HabitViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitViewController.swift; sourceTree = "<group>"; };
+		A4623102295F190E00C84570 /* HabitDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDate.swift; sourceTree = "<group>"; };
 		A4AFE8F7295DA119000D2895 /* HabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitCollectionViewCell.swift; sourceTree = "<group>"; };
 		A4AFE8F9295DB1BA000D2895 /* ProgresHabitCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgresHabitCollectionViewCell.swift; sourceTree = "<group>"; };
 		A4AFE900295DC23B000D2895 /* HabitDetailsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HabitDetailsViewController.swift; sourceTree = "<group>"; };
@@ -66,6 +68,7 @@
 		A443CB4B295B12D0006F8082 /* MyHabits */ = {
 			isa = PBXGroup;
 			children = (
+				A4623101295F18AE00C84570 /* HabitDate */,
 				A443CB60295B1DDB006F8082 /* Aplication */,
 				A4C51D74295D594C0001B8F5 /* TabBarController */,
 				A4C51D71295D58EC0001B8F5 /* Habits */,
@@ -84,6 +87,14 @@
 				A443CB4E295B12D0006F8082 /* SceneDelegate.swift */,
 			);
 			path = Aplication;
+			sourceTree = "<group>";
+		};
+		A4623101295F18AE00C84570 /* HabitDate */ = {
+			isa = PBXGroup;
+			children = (
+				A4623102295F190E00C84570 /* HabitDate.swift */,
+			);
+			path = HabitDate;
 			sourceTree = "<group>";
 		};
 		A4AFE8FB295DBB7A000D2895 /* HabitsCollectionView */ = {
@@ -212,6 +223,7 @@
 				A443CB51295B12D0006F8082 /* TabBarController.swift in Sources */,
 				A443CB68295B35AF006F8082 /* HabitViewController.swift in Sources */,
 				A4AFE8F8295DA119000D2895 /* HabitCollectionViewCell.swift in Sources */,
+				A4623103295F190E00C84570 /* HabitDate.swift in Sources */,
 				A443CB4D295B12D0006F8082 /* AppDelegate.swift in Sources */,
 				A443CB4F295B12D0006F8082 /* SceneDelegate.swift in Sources */,
 				A443CB62295B21A6006F8082 /* HabitsViewController.swift in Sources */,

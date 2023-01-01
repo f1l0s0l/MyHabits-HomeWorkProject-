@@ -11,6 +11,8 @@ class HabitViewController: UIViewController {
     
     // MARK: - Properties
     
+   
+    
     private lazy var viewInSafeArea: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -44,13 +46,21 @@ class HabitViewController: UIViewController {
         return label
     }()
     
-    private lazy var changeColorHabit: UIView = {
-        let view = UIView()
+    private lazy var changeColorHabit: UIButton = {
+        let view = UIButton(type: .system)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 15
         view.backgroundColor = .orange
+        view.setTitle("hhv", for: .normal)
+        view.addTarget(self, action: #selector(test), for: .touchUpInside)
         return view
     }()
+    
+    @objc
+    private func test() {
+        let vc = UIColorPickerViewController()
+        present(vc, animated: true)
+    }
     
     private lazy var timeHabitLabel: UILabel = {
         let label = UILabel()
@@ -63,12 +73,67 @@ class HabitViewController: UIViewController {
     
     private lazy var addTimeHabitLabel: UILabel = {
         let label = UILabel()
+        
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm"
+        
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Каждый день в ...."
+        label.text = "Каждый день в " + formatter.string(from: datePickerView.date)
+        
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .black
         return label
     }()
+    
+    private lazy var datePickerView: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.translatesAutoresizingMaskIntoConstraints = false
+        datePicker.datePickerMode = .time
+        datePicker.preferredDatePickerStyle = .wheels
+        
+        
+//        let clendar = NSCalendar.current
+//        let components = NSDateComponents()
+//        components.hour = 7
+//        components.minute = 0
+        
+        
+//        let timeStartFormatter = DateFormatter()
+//        timeStartFormatter.dateFormat = "H:mm a"
+//        let sTime = timeStartFormatter.date(from: "7:00 am")
+//
+//
+//        let asdasd = DateComponents(hour: 7, minute: 0)
+//
+//        datePicker.setDate(sTime!, animated: true)
+        
+        
+        //        datePicker.setDate(clendar.dateComponents(components, from: <#Date#>), animated: true)
+
+        
+//        datePicker.date = sTime!
+        
+        
+        
+        datePicker.addTarget(self, action: #selector(chengeDatePickerView), for: .valueChanged)
+        return datePicker
+    }()
+    
+    
+    @objc
+    private func chengeDatePickerView() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "hh:mm"
+        addTimeHabitLabel.text = "Каждый день в " + formatter.string(from: datePickerView.date)
+        
+    }
+    
+    
+    
+    
+    
+    
+    
     
     private lazy var removeHabitButtom: UIButton = {
         let button = UIButton(type: .system)
@@ -161,6 +226,7 @@ class HabitViewController: UIViewController {
         self.viewInSafeArea.addSubview(changeColorHabit)
         self.viewInSafeArea.addSubview(timeHabitLabel)
         self.viewInSafeArea.addSubview(addTimeHabitLabel)
+        self.viewInSafeArea.addSubview(datePickerView)
         self.viewInSafeArea.addSubview(removeHabitButtom)
 
     }
@@ -194,6 +260,11 @@ class HabitViewController: UIViewController {
             
             addTimeHabitLabel.topAnchor.constraint(equalTo: self.timeHabitLabel.bottomAnchor, constant: 7),
             addTimeHabitLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
+            
+            datePickerView.topAnchor.constraint(equalTo: self.addTimeHabitLabel.bottomAnchor, constant: 15),
+            datePickerView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
+            datePickerView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
+
             
             removeHabitButtom.centerXAnchor.constraint(equalTo: self.view.centerXAnchor),
             removeHabitButtom.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor, constant: -18),
