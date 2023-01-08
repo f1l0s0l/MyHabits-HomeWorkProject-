@@ -41,7 +41,19 @@ class HabitsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
+//        collecrionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+        
     }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        collecrionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
+    }
+    
+    
+    
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -82,6 +94,7 @@ class HabitsViewController: UIViewController {
     private func presentHabitVC() {
         let habitViewController = HabitViewController()
         habitViewController.setupTitle(with: "Создать")
+        habitViewController.delegate = self
         let vc = UINavigationController(rootViewController: habitViewController)
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
@@ -100,8 +113,12 @@ class HabitsViewController: UIViewController {
         
     }
 
+    
+    let store = HabitsStore.shared
 }
 
+
+// MARK: - ExtensionUICollectionViewDataSource
 
 extension HabitsViewController: UICollectionViewDataSource {
     
@@ -113,11 +130,11 @@ extension HabitsViewController: UICollectionViewDataSource {
         if section == 0 {
             return 1
         }
-        return 20
+        return store.habits.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
+
         if indexPath.section == 0 {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgresHabitCollectionViewCellID", for: indexPath) as? ProgresHabitCollectionViewCell else {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
@@ -126,15 +143,19 @@ extension HabitsViewController: UICollectionViewDataSource {
             }
             
             cell.layer.cornerRadius = 8
+            cell.setup()
+//            cell.setup()
             return cell
         }
     
-        
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "HabitCollectionViewCellID", for: indexPath) as? HabitCollectionViewCell else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath)
             cell.backgroundColor = .blue
             return cell
         }
+        
+        cell.setup(habit: store.habits[indexPath.item])
+//        cell.delegate = self
         
         cell.layer.cornerRadius = 8
         return cell
@@ -142,6 +163,7 @@ extension HabitsViewController: UICollectionViewDataSource {
     
 }
 
+// MARK: - ExtensionUICollectionViewDelegateFlowLayout
 
 extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     
@@ -152,12 +174,52 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
     }
     
+    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if indexPath.section != 0 {
             let habitDetailsViewController = HabitDetailsViewController()
+            
+            habitDetailsViewController.setup(index: indexPath.item)
+            habitDetailsViewController.delegate = self
             navigationController?.pushViewController(habitDetailsViewController, animated: true)
+        } else {
+            
+//            if let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ProgresHabitCollectionViewCellID", for: indexPath) as? ProgresHabitCollectionViewCell {
+//                cell.setup()
+//            }
         }
         
     }
    
+}
+
+// MARK: - ExtensionHabitViewControllerDelegate
+
+extension HabitsViewController: HabitViewControllerDelegate {
+    
+    func saveHabit(habit: Habit, isCreate: Bool, isRemove: Bool, indexInArrayHabits: Int) {
+        print("Вызов делегата в HabitsViewController")
+        
+        if isCreate == true && isRemove == false {
+            store.habits.insert(habit, at: 0)
+            collecrionView.insertItems(at: [IndexPath(item: 0, section: 1)])
+            print("Произошло сохранение привычки")
+        } else if isCreate == false && isRemove == false {
+            store.habits[indexInArrayHabits] = habit
+            collecrionView.reloadItems(at: [IndexPath(item: indexInArrayHabits, section: 1)])
+            print("Произошло изменение привычки")
+        } else if isRemove == true {
+            print("Произошло удаление привычки")
+            store.habits.removeAll(where: {$0 == habit})
+            collecrionView.deleteItems(at: [IndexPath(item: indexInArrayHabits, section: 1)])
+        }
+        
+        
+
+        
+        
+    }
+   
+    
+    
 }

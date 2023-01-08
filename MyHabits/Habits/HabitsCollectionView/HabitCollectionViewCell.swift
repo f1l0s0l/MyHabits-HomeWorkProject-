@@ -7,10 +7,15 @@
 
 import UIKit
 
+
+
+
 class HabitCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
 
+    private var thisHabit = Habit(name: "", date: Date.now, color: .white)
+    private let store = HabitsStore.shared
     
     private lazy var nameHabitLabel: UILabel = {
         let label = UILabel()
@@ -34,15 +39,44 @@ class HabitCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    private let isDoneHabitView: UIView = {
-        let view = UIView()
-        view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 19
-        view.backgroundColor = .orange
-        view.clipsToBounds = true
-        return view
+    private lazy var isDoneHabitView: UIButton = {
+        let imageView = UIButton()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 19
+        imageView.backgroundColor = .white
+        imageView.tintColor = .white
+        imageView.clipsToBounds = true
+        imageView.layer.borderWidth = 2
+        imageView.layer.borderColor = UIColor.orange.cgColor
+        imageView.addTarget(self, action: #selector(didPabIsDoneHabitView), for: .touchUpInside)
+        imageView.addTarget(self, action: #selector(didPabIsDoneHabitViewTest), for: .touchUpOutside)
+        return imageView
     }()
-
+    
+    @objc
+    private func didPabIsDoneHabitView() {
+        isDoneHabitView.backgroundColor = UIColor(cgColor: isDoneHabitView.layer.borderColor ?? UIColor.orange.cgColor)
+        store.track(thisHabit)
+    }
+    
+    @objc
+    private func didPabIsDoneHabitViewTest() {
+        isDoneHabitView.backgroundColor = .none
+    }
+    
+    private lazy var checkmarkInButton: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        let image = UIImage(systemName: "checkmark")
+        
+        imageView.image = image
+        imageView.tintColor = .white
+        return imageView
+    }()
+    
+    
+    
     // MARK: - Life cycle
     
     override init(frame: CGRect) {
@@ -54,11 +88,22 @@ class HabitCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+//    let store = HabitsStore.shared
     
     // MARK: - Methods
     
-    func setup() {
-       
+    func setup(habit: Habit) {
+        nameHabitLabel.text = habit.name
+        nameHabitLabel.textColor = habit.color
+        timeHabitLabel.text = habit.dateString
+
+        isDoneHabitView.layer.borderColor = habit.color.cgColor
+        thisHabit = habit
+        if habit.isAlreadyTakenToday == true {
+            isDoneHabitView.backgroundColor = habit.color
+        }
+        
+        
     }
 
     private func setupView() {
@@ -67,6 +112,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         self.addSubview(timeHabitLabel)
         self.addSubview(countTrackHabit)
         self.addSubview(isDoneHabitView)
+        self.addSubview(checkmarkInButton)
         self.setupConstraint()
     }
     
@@ -93,6 +139,11 @@ class HabitCollectionViewCell: UICollectionViewCell {
             self.isDoneHabitView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -25),
             self.isDoneHabitView.widthAnchor.constraint(equalToConstant: 38),
             self.isDoneHabitView.heightAnchor.constraint(equalToConstant: 38),
+            
+            self.checkmarkInButton.centerXAnchor.constraint(equalTo: self.isDoneHabitView.centerXAnchor),
+            self.checkmarkInButton.centerYAnchor.constraint(equalTo: self.isDoneHabitView.centerYAnchor),
+            self.checkmarkInButton.widthAnchor.constraint(equalToConstant: 20),
+            self.checkmarkInButton.heightAnchor.constraint(equalToConstant: 20),
 
         ])
     }

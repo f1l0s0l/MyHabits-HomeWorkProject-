@@ -7,10 +7,30 @@
 
 import UIKit
 
+//enum IndexPathHabit {
+//    static var indexPath: IndexPath?
+//}
+
 class HabitDetailsViewController: UIViewController{
     
 // MARK: - Proterties
+    
+    
+    
+    
+    
+    
 
+    weak var delegate: HabitViewControllerDelegate?
+    
+    var store = HabitsStore.shared
+    
+    private var habit = Habit(name: "", date: Date.now, color: .orange)
+    
+    private var indexThisHabit = 0
+    
+    
+    
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -30,17 +50,31 @@ class HabitDetailsViewController: UIViewController{
         self.setupView()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = false
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         self.navigationController?.navigationBar.prefersLargeTitles = true
     }
 
     
 //MARK: - Methods
+    
+    func setup(index: Int) {
+        self.title = store.habits[index].name
+        
+        self.indexThisHabit = index
+        habit = store.habits[index]
+    }
 
+    
+    
+    
     private func setupView() {
         self.view.backgroundColor = .systemGray6
-        self.title = "Название привычки"
         self.view.addSubview(tableView)
         self.setupConstraint()
         self.setupNavigationBar()
@@ -62,7 +96,9 @@ class HabitDetailsViewController: UIViewController{
     @objc
     private func presentHabitVC() {
         let habitViewController = HabitViewController()
-        habitViewController.setupTitle(with: "Название привычки")
+        habitViewController.setupTitle(with: "Править")
+        habitViewController.setup(index: indexThisHabit)
+        habitViewController.delegate = self
         let vc = UINavigationController(rootViewController: habitViewController)
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
@@ -88,12 +124,25 @@ class HabitDetailsViewController: UIViewController{
 extension HabitDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        4
+        store.dates.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = "дата активности"
+        cell.textLabel?.text = store.trackDateString(forIndex: indexPath.item)
+        
+        let imageView: UIImageView = {
+            let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))// ТУТ Вопрос!!!
+            imageView.image = UIImage(systemName: "checkmark")
+            imageView.tintColor = .orange
+            return imageView
+        }()
+        
+        if store.habit(habit, isTrackedIn: store.dates[indexPath.item]) {
+            cell.accessoryView = imageView
+        }
+        
         return cell
     }
     
@@ -108,7 +157,27 @@ extension HabitDetailsViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+        
+//        navigationController?.dismiss(animated: true)
+//        navigationController.
+//        dismiss(animated: true)
+        navigationController?.popToRootViewController(animated: true)
     }
     
 }
 
+
+extension HabitDetailsViewController: HabitViewControllerDelegate {
+    
+    func saveHabit(habit: Habit, isCreate: Bool, isRemove: Bool, indexInArrayHabits: Int) {
+        print("Вызов делегата в HabitDetailsViewController")
+        self.title = habit.name
+        delegate?.saveHabit(habit: habit, isCreate: isCreate, isRemove: isRemove, indexInArrayHabits: indexInArrayHabits)
+        if isRemove {
+            self.navigationController?.popToRootViewController(animated: true)
+        }
+        //воможно тут не понадобится делегат второй, щас проверим
+    }
+    
+    
+}

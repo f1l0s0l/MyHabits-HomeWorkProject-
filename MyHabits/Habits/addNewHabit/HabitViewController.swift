@@ -7,11 +7,20 @@
 
 import UIKit
 
+protocol HabitViewControllerDelegate: AnyObject {
+    func saveHabit(habit: Habit, isCreate: Bool, isRemove: Bool, indexInArrayHabits: Int)
+
+}
+
 class HabitViewController: UIViewController {
     
     // MARK: - Properties
     
-   
+    weak var delegate: HabitViewControllerDelegate?
+    
+    
+    private var oldStateHabit: Habit?
+    private var oldIndex = 0
     
     private lazy var viewInSafeArea: UIView = {
         let view = UIView()
@@ -32,10 +41,19 @@ class HabitViewController: UIViewController {
     private lazy var nameHabitTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        
         textField.placeholder = "Бегать по утрам, спать 8 часов и т.п."
+//        textField.addTarget(self, action: #selector(changeNameHabitLabel), for: .valueChanged)
+        textField.delegate = self
         return textField
     }()
+    
+//    @objc
+//    private func changeNameHabitLabel(_ textField: UITextField) {
+//        nameHabitLabel.text = textField.text
+//    }
+    
+    
+    
     
     private lazy var colorHabitLabel: UILabel = {
         let label = UILabel()
@@ -52,14 +70,19 @@ class HabitViewController: UIViewController {
         view.layer.cornerRadius = 15
         view.backgroundColor = .orange
         view.setTitle("hhv", for: .normal)
-        view.addTarget(self, action: #selector(test), for: .touchUpInside)
+        view.addTarget(self, action: #selector(presentColorPickerVC), for: .touchUpInside)
         return view
     }()
     
+    private lazy var colorPickerViewController: UIColorPickerViewController = {
+        let colorPicker = UIColorPickerViewController()
+        colorPicker.delegate = self
+        return colorPicker
+    }()
+    
     @objc
-    private func test() {
-        let vc = UIColorPickerViewController()
-        present(vc, animated: true)
+    private func presentColorPickerVC() {
+        present(colorPickerViewController, animated: true)
     }
     
     private lazy var timeHabitLabel: UILabel = {
@@ -73,6 +96,8 @@ class HabitViewController: UIViewController {
     
     private lazy var addTimeHabitLabel: UILabel = {
         let label = UILabel()
+        let date = Date()
+        
         
         let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm"
@@ -90,31 +115,6 @@ class HabitViewController: UIViewController {
         datePicker.translatesAutoresizingMaskIntoConstraints = false
         datePicker.datePickerMode = .time
         datePicker.preferredDatePickerStyle = .wheels
-        
-        
-//        let clendar = NSCalendar.current
-//        let components = NSDateComponents()
-//        components.hour = 7
-//        components.minute = 0
-        
-        
-//        let timeStartFormatter = DateFormatter()
-//        timeStartFormatter.dateFormat = "H:mm a"
-//        let sTime = timeStartFormatter.date(from: "7:00 am")
-//
-//
-//        let asdasd = DateComponents(hour: 7, minute: 0)
-//
-//        datePicker.setDate(sTime!, animated: true)
-        
-        
-        //        datePicker.setDate(clendar.dateComponents(components, from: <#Date#>), animated: true)
-
-        
-//        datePicker.date = sTime!
-        
-        
-        
         datePicker.addTarget(self, action: #selector(chengeDatePickerView), for: .valueChanged)
         return datePicker
     }()
@@ -129,12 +129,7 @@ class HabitViewController: UIViewController {
     }
     
     
-    
-    
-    
-    
-    
-    
+
     private lazy var removeHabitButtom: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -147,14 +142,21 @@ class HabitViewController: UIViewController {
     private lazy var removeHabitAlertController: UIAlertController = {
         let alert = UIAlertController(
             title: "Удалить привычку",
-            message: "Вы действительно хотите удалить привычку \"название выбранной привычки\"",
+            message: "Вы действительно хотите удалить привычку \"\(self.nameHabitTextField.text ?? "")\"",
             preferredStyle: .alert
         )
         let action1 = UIAlertAction(title: "Отмена", style: .cancel) {_ in
-            print("Отмена")
+            print("Нажал на Отмена привычку в алерте")
         }
         let action2 = UIAlertAction(title: "Удалить", style: .destructive) {_ in
-            print("Удалить")
+            print("Нажал на Удалить привычку в алерте")
+            
+            if let habit = self.oldStateHabit {
+                self.delegate?.saveHabit(habit: habit, isCreate: false, isRemove: true, indexInArrayHabits: self.oldIndex)
+            }
+//            self.store.habits.removeAll(where: {$0 == self.oldStateHabit})
+            
+            self.dismiss(animated: true)
         }
         
         alert.addAction(action1)
@@ -169,9 +171,32 @@ class HabitViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
+        setupRemoveButton()
+        
+        
+//        print(store.habits)
     }
     
     // MARK: - Methods
+    
+    
+    func setup(index: Int) {
+        let habit = store.habits[index]
+        nameHabitTextField.text = habit.name
+        changeColorHabit.backgroundColor = habit.color
+        colorPickerViewController.selectedColor = habit.color
+        addTimeHabitLabel.text = habit.dateString
+        
+        oldStateHabit = habit
+        oldIndex = index
+    }
+    
+    
+    private func setupRemoveButton(){
+        if self.title == "Создать" {
+            removeHabitButtom.alpha = 0
+        }
+    }
 
     private func setupView() {
         self.view.backgroundColor = UIColor(red: 249/255, green: 249/255, blue: 249/255, alpha: 0.94)
@@ -186,7 +211,7 @@ class HabitViewController: UIViewController {
             let button = UIButton(type: .system)
             button.setTitle("Сохранить", for: .normal)
             button.tintColor = UIColor(red: 161/225, green: 22/225, blue: 204/225, alpha: 1)
-            button.addTarget(self, action: #selector(openHabitVC), for: .touchUpInside)
+            button.addTarget(self, action: #selector(didPabSaveBarButton), for: .touchUpInside)
             let saveBarButtonItem = UIBarButtonItem(customView: button)
             return saveBarButtonItem
         }()
@@ -195,7 +220,7 @@ class HabitViewController: UIViewController {
             let button = UIButton(type: .system)
             button.setTitle("Отменить", for: .normal)
             button.tintColor = UIColor(red: 161/225, green: 22/225, blue: 204/225, alpha: 1)
-//            button.addTarget(self, action: #selector(openHabitVC), for: .touchUpInside)
+            button.addTarget(self, action: #selector(dismissHabitViewController), for: .touchUpInside)
             let canselButtonItem = UIBarButtonItem(customView: button)
             return canselButtonItem
         }()
@@ -204,9 +229,28 @@ class HabitViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = canselButtonItem
     }
     
+    
+    
+    let store = HabitsStore.shared
+    
     @objc
-    private func openHabitVC() {
+    private func dismissHabitViewController() {
         dismiss(animated: true)
+    }
+    
+    
+    @objc
+    private func didPabSaveBarButton() {
+        let habit = Habit(name: nameHabitTextField.text ?? "Привычка", date: datePickerView.date, color: colorPickerViewController.selectedColor)
+        
+        if self.title == "Создать" {
+            delegate?.saveHabit(habit: habit, isCreate: true, isRemove: false, indexInArrayHabits: oldIndex)
+        } else {
+            print("тут работает")
+            delegate?.saveHabit(habit: habit, isCreate: false, isRemove: false, indexInArrayHabits: oldIndex)
+        }
+        
+        dismissHabitViewController()
     }
     
     @objc
@@ -231,6 +275,10 @@ class HabitViewController: UIViewController {
 
     }
     
+    @objc
+    private func forcedHidingKeyboard() {
+        self.view.endEditing(true)
+    }
     
     // MARK: - Constraints
     
@@ -273,5 +321,29 @@ class HabitViewController: UIViewController {
     }
 
     
+    
+}
+
+// MARK: - Extension
+
+extension HabitViewController: UIColorPickerViewControllerDelegate {
+    
+//    func colorPickerViewController(_ viewController: UIColorPickerViewController, didSelect color: UIColor, continuously: Bool) {
+//        <#code#>
+//    }
+    
+    func colorPickerViewControllerDidSelectColor(_ viewController: UIColorPickerViewController) {
+        changeColorHabit.backgroundColor = viewController.selectedColor
+    }
+    
+}
+
+
+extension HabitViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.forcedHidingKeyboard()
+        return true
+    }
     
 }
