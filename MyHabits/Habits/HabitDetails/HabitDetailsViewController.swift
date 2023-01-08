@@ -7,29 +7,14 @@
 
 import UIKit
 
-//enum IndexPathHabit {
-//    static var indexPath: IndexPath?
-//}
-
 class HabitDetailsViewController: UIViewController{
     
-// MARK: - Proterties
-    
-    
-    
-    
-    
-    
+    // MARK: - Proterties
 
     weak var delegate: HabitViewControllerDelegate?
-    
-    var store = HabitsStore.shared
-    
-    private var habit = Habit(name: "", date: Date.now, color: .orange)
-    
-    private var indexThisHabit = 0
-    
-    
+
+    private var thisHabit = Habit(name: "", date: Date.now, color: .orange)
+    private var thisHabitIndex = 0
     
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -43,7 +28,7 @@ class HabitDetailsViewController: UIViewController{
     }()
     
 
-// MARK: - Life cycle
+    // MARK: - Life cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -61,27 +46,22 @@ class HabitDetailsViewController: UIViewController{
     }
 
     
-//MARK: - Methods
+    //MARK: - Methods
     
     func setup(index: Int) {
-        self.title = store.habits[index].name
-        
-        self.indexThisHabit = index
-        habit = store.habits[index]
+        self.thisHabit = HabitsStore.shared.habits[index]
+        self.thisHabitIndex = index
+        self.title = thisHabit.name
     }
-
-    
-    
-    
+ 
     private func setupView() {
         self.view.backgroundColor = .systemGray6
         self.view.addSubview(tableView)
-        self.setupConstraint()
         self.setupNavigationBar()
+        self.setupConstraint()
     }
     
     private func setupNavigationBar() {
-        
         let changeHabitBarButtonItem: UIBarButtonItem = {
             let button = UIButton(type: .system)
             button.setTitle("Править", for: .normal)
@@ -92,20 +72,20 @@ class HabitDetailsViewController: UIViewController{
         }()
         self.navigationItem.rightBarButtonItem = changeHabitBarButtonItem
     }
-    
     @objc
     private func presentHabitVC() {
         let habitViewController = HabitViewController()
         habitViewController.setupTitle(with: "Править")
-        habitViewController.setup(index: indexThisHabit)
+        habitViewController.setup(index: thisHabitIndex)
         habitViewController.delegate = self
+        
         let vc = UINavigationController(rootViewController: habitViewController)
         vc.modalPresentationStyle = .fullScreen
         present(vc, animated: true, completion: nil)
     }
     
 
-// MARK: - Constraint
+    // MARK: - Constraint
 
     private func setupConstraint() {
         NSLayoutConstraint.activate([
@@ -113,24 +93,25 @@ class HabitDetailsViewController: UIViewController{
             tableView.leftAnchor.constraint(equalTo: self.view.leftAnchor),
             tableView.rightAnchor.constraint(equalTo: self.view.rightAnchor),
             tableView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-        
         ])
     }
+    
 }
 
 
-// MARK: - Extension
+    // MARK: - Extension UITableViewDataSource
 
 extension HabitDetailsViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        store.dates.count
+        HabitsStore.shared.dates.count
     }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.textLabel?.text = store.trackDateString(forIndex: indexPath.item)
+        cell.textLabel?.text = HabitsStore.shared.trackDateString(forIndex: indexPath.item)
         
         let imageView: UIImageView = {
             let imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: 20, height: 20))// ТУТ Вопрос!!!
@@ -139,12 +120,13 @@ extension HabitDetailsViewController: UITableViewDataSource {
             return imageView
         }()
         
-        if store.habit(habit, isTrackedIn: store.dates[indexPath.item]) {
+        if HabitsStore.shared.habit(thisHabit, isTrackedIn: HabitsStore.shared.dates[indexPath.item]) {
             cell.accessoryView = imageView
         }
         
         return cell
     }
+    
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         "АКТИВНОСТЬ"
@@ -167,17 +149,27 @@ extension HabitDetailsViewController: UITableViewDelegate {
 }
 
 
+    // MARK: - Extension HabitViewControllerDelegate
+
 extension HabitDetailsViewController: HabitViewControllerDelegate {
     
-    func saveHabit(habit: Habit, isCreate: Bool, isRemove: Bool, indexInArrayHabits: Int) {
-        print("Вызов делегата в HabitDetailsViewController")
-        self.title = habit.name
-        delegate?.saveHabit(habit: habit, isCreate: isCreate, isRemove: isRemove, indexInArrayHabits: indexInArrayHabits)
-        if isRemove {
+    func saveHabit(habit: Habit, isCreateHabit: Bool, isChangeHabit: Bool, isChangeTrackHabit: Bool, isRemoveHabit: Bool, indexInArrayHabits: Int) {
+        
+        delegate?.saveHabit(habit: habit,
+                            isCreateHabit: isCreateHabit,
+                            isChangeHabit: isChangeHabit,
+                            isChangeTrackHabit: isChangeTrackHabit,
+                            isRemoveHabit: isRemoveHabit,
+                            indexInArrayHabits: indexInArrayHabits
+        )
+        
+        if isRemoveHabit {
             self.navigationController?.popToRootViewController(animated: true)
         }
-        //воможно тут не понадобится делегат второй, щас проверим
+    
+        if isChangeHabit {
+            self.title = habit.name
+        }
     }
-    
-    
+
 }

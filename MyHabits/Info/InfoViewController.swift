@@ -27,7 +27,6 @@ class InfoViewController: UIViewController {
     
     private lazy var stackView: UIStackView = {
         let stackView = UIStackView()
-//        stackView.backgroundColor = .orange
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .vertical
         stackView.spacing = 12
@@ -43,6 +42,7 @@ class InfoViewController: UIViewController {
         """
         return label
     }()
+    
     private lazy var text1Label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -52,6 +52,7 @@ class InfoViewController: UIViewController {
         """
         return label
     }()
+    
     private lazy var text2Label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -61,6 +62,7 @@ class InfoViewController: UIViewController {
         """
         return label
     }()
+    
     private lazy var text3Label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -70,6 +72,7 @@ class InfoViewController: UIViewController {
         """
         return label
     }()
+    
     private lazy var text4Label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -80,6 +83,7 @@ class InfoViewController: UIViewController {
         """
         return label
     }()
+    
     private lazy var text5Label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -89,6 +93,7 @@ class InfoViewController: UIViewController {
         """
         return label
     }()
+    
     private lazy var text6Label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -105,8 +110,8 @@ class InfoViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupView()
-        self.setupConstraints()
     }
+    
     
     // MARK: - Methods
 
@@ -114,6 +119,7 @@ class InfoViewController: UIViewController {
         self.title = "Информация"
         self.view.backgroundColor = .systemGray6
         self.setupAddSubviews()
+        self.setupConstraints()
     }
     
     private func setupAddSubviews() {
@@ -127,8 +133,8 @@ class InfoViewController: UIViewController {
         self.stackView.addArrangedSubview(text4Label)
         self.stackView.addArrangedSubview(text5Label)
         self.stackView.addArrangedSubview(text6Label)
-        
     }
+    
     
     // MARK: - Constraints
 
@@ -143,13 +149,10 @@ class InfoViewController: UIViewController {
             headerTextLabel.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             headerTextLabel.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: 16),
 
-            
             stackView.topAnchor.constraint(equalTo: self.headerTextLabel.bottomAnchor, constant: 16),
             stackView.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 16),
             stackView.rightAnchor.constraint(equalTo: self.view.rightAnchor, constant: -16),
             stackView.bottomAnchor.constraint(equalTo: self.scrollView.bottomAnchor),
-
-
         ])
     }
    

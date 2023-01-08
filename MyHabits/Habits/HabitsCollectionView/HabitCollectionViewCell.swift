@@ -7,15 +7,14 @@
 
 import UIKit
 
-
-
-
 class HabitCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
+    
+    weak var delegate: HabitViewControllerDelegate?
 
     private var thisHabit = Habit(name: "", date: Date.now, color: .white)
-    private let store = HabitsStore.shared
+    private var thisHabitIndex = 0
     
     private lazy var nameHabitLabel: UILabel = {
         let label = UILabel()
@@ -50,31 +49,29 @@ class HabitCollectionViewCell: UICollectionViewCell {
         imageView.layer.borderWidth = 2
         imageView.layer.borderColor = UIColor.orange.cgColor
         imageView.addTarget(self, action: #selector(didPabIsDoneHabitView), for: .touchUpInside)
-        imageView.addTarget(self, action: #selector(didPabIsDoneHabitViewTest), for: .touchUpOutside)
         return imageView
     }()
     
     @objc
     private func didPabIsDoneHabitView() {
-        isDoneHabitView.backgroundColor = UIColor(cgColor: isDoneHabitView.layer.borderColor ?? UIColor.orange.cgColor)
-        store.track(thisHabit)
-    }
-    
-    @objc
-    private func didPabIsDoneHabitViewTest() {
-        isDoneHabitView.backgroundColor = .none
+        if thisHabit.isAlreadyTakenToday == false {
+            delegate?.saveHabit(habit: thisHabit,
+                                isCreateHabit: false,
+                                isChangeHabit: false,
+                                isChangeTrackHabit: true,
+                                isRemoveHabit: false,
+                                indexInArrayHabits: thisHabitIndex)
+        }
     }
     
     private lazy var checkmarkInButton: UIImageView = {
+        let image = UIImage(systemName: "checkmark")
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        let image = UIImage(systemName: "checkmark")
-        
-        imageView.image = image
         imageView.tintColor = .white
+        imageView.image = image
         return imageView
     }()
-    
     
     
     // MARK: - Life cycle
@@ -88,22 +85,24 @@ class HabitCollectionViewCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-//    let store = HabitsStore.shared
     
     // MARK: - Methods
     
-    func setup(habit: Habit) {
-        nameHabitLabel.text = habit.name
-        nameHabitLabel.textColor = habit.color
-        timeHabitLabel.text = habit.dateString
-
-        isDoneHabitView.layer.borderColor = habit.color.cgColor
+    func setup(habit: Habit, indexInArray: Int) {
         thisHabit = habit
-        if habit.isAlreadyTakenToday == true {
+        thisHabitIndex = indexInArray
+        
+        nameHabitLabel.text = thisHabit.name
+        nameHabitLabel.textColor = thisHabit.color
+        timeHabitLabel.text = thisHabit.dateString
+        isDoneHabitView.layer.borderColor = habit.color.cgColor
+        countTrackHabit.text = "Счетчик \(thisHabit.trackDates.count)"
+        
+        if habit.isAlreadyTakenToday {
             isDoneHabitView.backgroundColor = habit.color
+        } else {
+            isDoneHabitView.backgroundColor = .none
         }
-        
-        
     }
 
     private func setupView() {
@@ -115,8 +114,6 @@ class HabitCollectionViewCell: UICollectionViewCell {
         self.addSubview(checkmarkInButton)
         self.setupConstraint()
     }
-    
-    
     
     
     // MARK: - Constraints
@@ -147,6 +144,5 @@ class HabitCollectionViewCell: UICollectionViewCell {
 
         ])
     }
-    
     
 }

@@ -20,7 +20,6 @@ class TabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.setupTabBar()
-        
     }
     
     
@@ -47,12 +46,7 @@ class TabBarController: UITabBarController {
         
         UINavigationBar.appearance().tintColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
         UINavigationBar.appearance().backgroundColor = .systemGray6
-
-        
-        
     }
-    
-
 
 }
 

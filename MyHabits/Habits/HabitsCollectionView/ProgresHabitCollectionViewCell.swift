@@ -10,10 +10,6 @@ import UIKit
 class ProgresHabitCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
-
-    private var store = HabitsStore.shared
-    
-    
     
     private lazy var textLabel: UILabel = {
         let label = UILabel()
@@ -22,11 +18,10 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
-    
     private lazy var countProgress: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "  0%"
+        label.text = "0%"
         return label
     }()
     
@@ -37,6 +32,7 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
         view.layer.cornerRadius = 3.5
         return view
     }()
+    
     private lazy var progresView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
@@ -45,13 +41,14 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
         return view
     }()
     
+    private var progresViewWidthAnchor: NSLayoutConstraint?
+    
     
     // MARK: - Life cycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setupView()
-//        self.setup()
     }
     
     required init?(coder: NSCoder) {
@@ -61,38 +58,20 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Methods
     
-    private func setupGestures() {
-        let tabGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(test))
-        tabGestureRecognizer.numberOfTapsRequired = 2
-        self.progresBackView.addGestureRecognizer(tabGestureRecognizer)
-    }
-    
-    @objc
-    private func test() {
-        setup()
-    }
-    
-    
-     func setup() {
-        print("нажал на прогресс")
-        let progress = store.todayProgress
+    func setup() {
+       print("нажал на прогресс")
+        let todayProgress = HabitsStore.shared.todayProgress
         let maxProgressWidth = progresBackView.frame.width
-        
-        let progressWidth = maxProgressWidth * CGFloat(progress)
-        
-        progresViewWidthAnchor?.constant = progressWidth
-        
-//        progresViewWidthAnchor = progresView.widthAnchor.constraint(equalToConstant: CGFloat(progressWidth))
-        
-         UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {
+        let todayProgressWidth = maxProgressWidth * CGFloat(todayProgress)
+        progresViewWidthAnchor?.constant = todayProgressWidth
+        UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {
             print("по идее должна заработать анимация")
-            self.countProgress.text = "\(  Int(progress * 100)  )%"
-             print("перерасчет пошел")
+            self.countProgress.text = "\( Int(todayProgress * 100 ))%"
+            print("перерасчет пошел")
             self.layoutIfNeeded()
-        }
-        
-    }
-
+       }
+   }
+    
     private func setupView() {
         self.backgroundColor = .white
         self.addSubview(textLabel)
@@ -100,18 +79,12 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
         self.addSubview(progresBackView)
         self.addSubview(progresView)
         self.setupConstraint()
-        setupGestures()
     }
     
-    
-    private var progresViewWidthAnchor: NSLayoutConstraint?
     
     // MARK: - Constraints
     
     private func setupConstraint() {
-        
-        
-        
         progresViewWidthAnchor = progresView.widthAnchor.constraint(equalToConstant: 0)
         
         NSLayoutConstraint.activate([
@@ -129,17 +102,10 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
             
             progresView.topAnchor.constraint(equalTo: self.textLabel.bottomAnchor, constant: 10),
             progresView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 12),
-            
-            progresViewWidthAnchor,
-//            progresView.widthAnchor.constraint(equalToConstant: 20),
-            
-            
             progresView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -15),
             progresView.heightAnchor.constraint(equalToConstant: 7),
-            
-
+            progresViewWidthAnchor,
         ].compactMap({ $0 }))
     }
-    
-    
+
 }
