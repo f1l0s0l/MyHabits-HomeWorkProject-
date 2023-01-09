@@ -14,6 +14,8 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
     private lazy var textLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .systemGray
         label.text = "Все получится!"
         return label
     }()
@@ -21,6 +23,8 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
     private lazy var countProgress: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
+        label.textColor = .systemGray
         label.text = "0%"
         return label
     }()
@@ -59,15 +63,15 @@ class ProgresHabitCollectionViewCell: UICollectionViewCell {
     // MARK: - Methods
     
     func setup() {
-       print("нажал на прогресс")
+//       print("нажал на прогресс")
         let todayProgress = HabitsStore.shared.todayProgress
         let maxProgressWidth = progresBackView.frame.width
         let todayProgressWidth = maxProgressWidth * CGFloat(todayProgress)
         progresViewWidthAnchor?.constant = todayProgressWidth
         UIView.animate(withDuration: 1, delay: 0, options: .curveEaseInOut) {
-            print("по идее должна заработать анимация")
+//            print("по идее должна заработать анимация")
             self.countProgress.text = "\( Int(todayProgress * 100 ))%"
-            print("перерасчет пошел")
+//            print("перерасчет пошел")
             self.layoutIfNeeded()
        }
    }

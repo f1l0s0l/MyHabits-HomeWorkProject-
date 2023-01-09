@@ -40,11 +40,6 @@ class HabitDetailsViewController: UIViewController{
         self.navigationController?.navigationBar.prefersLargeTitles = false
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        self.navigationController?.navigationBar.prefersLargeTitles = true
-    }
-
     
     //MARK: - Methods
     
@@ -143,7 +138,7 @@ extension HabitDetailsViewController: UITableViewDelegate {
 //        navigationController?.dismiss(animated: true)
 //        navigationController.
 //        dismiss(animated: true)
-        navigationController?.popToRootViewController(animated: true)
+//        navigationController?.popToRootViewController(animated: true)
     }
     
 }

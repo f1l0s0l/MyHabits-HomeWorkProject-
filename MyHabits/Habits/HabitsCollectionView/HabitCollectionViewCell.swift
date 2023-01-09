@@ -20,6 +20,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Название привычки"
+        label.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
         label.numberOfLines = 0
         return label
     }()
@@ -27,6 +28,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
     private lazy var timeHabitLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 12, weight: .regular)
+        label.textColor = .systemGray2
         label.text = "Каждый день в 7:00 утра"
         return label
     }()
@@ -34,6 +37,8 @@ class HabitCollectionViewCell: UICollectionViewCell {
     private lazy var countTrackHabit: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        label.textColor = .systemGray
         label.text = "Счетчик 0"
         return label
     }()
@@ -47,7 +52,7 @@ class HabitCollectionViewCell: UICollectionViewCell {
         imageView.tintColor = .white
         imageView.clipsToBounds = true
         imageView.layer.borderWidth = 2
-        imageView.layer.borderColor = UIColor.orange.cgColor
+//        imageView.layer.borderColor = UIColor.orange.cgColor
         imageView.addTarget(self, action: #selector(didPabIsDoneHabitView), for: .touchUpInside)
         return imageView
     }()

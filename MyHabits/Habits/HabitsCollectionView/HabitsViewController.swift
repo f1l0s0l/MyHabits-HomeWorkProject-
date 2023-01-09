@@ -14,7 +14,7 @@ class HabitsViewController: UIViewController {
     private lazy var layout: UICollectionViewFlowLayout = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
-        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 20, height: 200)
+        layout.estimatedItemSize = CGSize(width: UIScreen.main.bounds.width - 32, height: 200)
         layout.minimumLineSpacing = 12
         return layout
     }()
@@ -40,14 +40,14 @@ class HabitsViewController: UIViewController {
         self.setupView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         self.collecrionView.reloadItems(at: [IndexPath(item: 0, section: 0)])
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        self.navigationController?.navigationBar.prefersLargeTitles = false
     }
     
     // MARK: - Methods
@@ -151,10 +151,10 @@ extension HabitsViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
         if section == 0 {
-            return UIEdgeInsets(top: 22, left: 10, bottom: 18, right: 10)
+            return UIEdgeInsets(top: 22, left: 16, bottom: 18, right: 16)
         }
         
-        return UIEdgeInsets(top: 0, left: 10, bottom: 0, right: 10)
+        return UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     }
     
     
@@ -176,7 +176,7 @@ extension HabitsViewController: HabitViewControllerDelegate {
     
     func saveHabit(habit: Habit, isCreateHabit: Bool, isChangeHabit: Bool, isChangeTrackHabit: Bool, isRemoveHabit: Bool, indexInArrayHabits: Int) {
         
-        print("Вызов делегата в HabitsViewController")
+//        print("Вызов делегата в HabitsViewController")
         
         
         if isCreateHabit {
@@ -197,7 +197,7 @@ extension HabitsViewController: HabitViewControllerDelegate {
         }
         
         if isRemoveHabit {
-            print("Произошло удаление привычки")
+//            print("Произошло удаление привычки")
             HabitsStore.shared.habits.removeAll(where: {$0 == habit})
             collecrionView.deleteItems(at: [IndexPath(item: indexInArrayHabits, section: 1)])
             collecrionView.reloadItems(at: [IndexPath(item: 0, section: 0)])

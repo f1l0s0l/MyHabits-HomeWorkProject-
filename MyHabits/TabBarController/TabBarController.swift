@@ -35,16 +35,16 @@ class TabBarController: UITabBarController {
                                  image: UIImage(systemName: "square.stack.3d.down.right"), tag: 0)
         
         let item2 = UITabBarItem(title: "Info",
-                                 image: UIImage(systemName: "person.crop.circle"), tag: 1)
+                                 image: UIImage(systemName: "info.circle.fill"), tag: 1)
         
         habitsViewController.tabBarItem = item1
         infoViewController.tabBarItem = item2
         
-        UITabBar.appearance().tintColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
+        UITabBar.appearance().tintColor = UIColor(red: 161/225, green: 22/225, blue: 204/225, alpha: 1)
         UITabBar.appearance().backgroundColor = .systemGray6
         
         
-        UINavigationBar.appearance().tintColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 1.0)
+        UINavigationBar.appearance().tintColor = UIColor(red: 161/225, green: 22/225, blue: 204/225, alpha: 1)
         UINavigationBar.appearance().backgroundColor = .systemGray6
     }
 

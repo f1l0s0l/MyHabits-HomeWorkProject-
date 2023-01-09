@@ -38,7 +38,7 @@ class HabitViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "НАЗВАНИЕ"
-        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         label.textColor = .black
         return label
     }()
@@ -46,7 +46,9 @@ class HabitViewController: UIViewController {
     private lazy var nameHabitTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "Бегать по утрам, спать 8 часов и т.п."
+        textField.font = UIFont.systemFont(ofSize: 17, weight: .semibold)
+        textField.textColor = UIColor.blue
+        textField.placeholder = "Бегать по утрам, спать 8 часов и т.п." // Тут вопрос по шрифту
         textField.delegate = self
         return textField
     }()
@@ -55,7 +57,7 @@ class HabitViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "ЦВЕТ"
-        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         label.textColor = .black
         return label
     }()
@@ -76,6 +78,7 @@ class HabitViewController: UIViewController {
     private lazy var colorPickerViewController: UIColorPickerViewController = {
         let colorPicker = UIColorPickerViewController()
         colorPicker.delegate = self
+        colorPicker.selectedColor = .orange
         return colorPicker
     }()
     
@@ -83,21 +86,19 @@ class HabitViewController: UIViewController {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "ВРЕМЯ"
-        label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
+        label.font = UIFont.systemFont(ofSize: 13, weight: .semibold)
         label.textColor = .black
         return label
     }()
     
     private lazy var addTimeHabitLabel: UILabel = {
         let label = UILabel()
-        let date = Date()
-        
+        label.translatesAutoresizingMaskIntoConstraints = false
+
         let formatter = DateFormatter()
         formatter.dateFormat = "hh:mm"
         
-        label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Каждый день в " + formatter.string(from: datePickerView.date)
-        
         label.font = UIFont.systemFont(ofSize: 13, weight: .regular)
         label.textColor = .black
         return label
@@ -135,10 +136,10 @@ class HabitViewController: UIViewController {
             preferredStyle: .alert
         )
         let action1 = UIAlertAction(title: "Отмена", style: .cancel) {_ in
-            print("Нажал на Отмена привычку в алерте")
+//            print("Нажал на Отмена привычку в алерте")
         }
         let action2 = UIAlertAction(title: "Удалить", style: .destructive) {_ in
-            print("Нажал на Удалить привычку в алерте")
+//            print("Нажал на Удалить привычку в алерте")
             self.delegate?.saveHabit(habit: self.thisHabit,
                                      isCreateHabit: false,
                                      isChangeHabit: false,
@@ -233,7 +234,7 @@ class HabitViewController: UIViewController {
                                 indexInArrayHabits: thisHabitIndex
             )
         } else {
-            print("тут работает")
+//            print("тут работает")
             delegate?.saveHabit(habit: habit,
                                 isCreateHabit: false,
                                 isChangeHabit: true,

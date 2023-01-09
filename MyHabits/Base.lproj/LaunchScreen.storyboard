@@ -12,25 +12,27 @@
         <scene sceneID="EHf-IW-A2E">
             <objects>
                 <viewController id="01J-lp-oVM" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" ambiguous="YES" id="Ze5-6b-2t3">
+                    <view key="view" contentMode="scaleToFill" id="Ze5-6b-2t3">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="AppIcon-1024px" translatesAutoresizingMaskIntoConstraints="NO" id="hgb-w0-cg7">
-                                <rect key="frame" x="128" y="346" width="120" height="120"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="120" id="5Cg-wg-wb5"/>
-                                    <constraint firstAttribute="width" constant="120" id="oqT-LK-gqy"/>
-                                </constraints>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MyHabits" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kp4-JH-0oC">
+                                <rect key="frame" x="163" y="762" width="88" height="24"/>
+                                <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="20"/>
+                                <color key="textColor" red="0.63137254901960782" green="0.086274509803921567" blue="0.80000000000000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="XqP-wr-gej">
+                                <rect key="frame" x="147" y="393" width="120" height="120"/>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="hgb-w0-cg7" secondAttribute="trailing" constant="127" id="OUs-9P-KQA"/>
-                            <constraint firstItem="hgb-w0-cg7" firstAttribute="top" secondItem="Ze5-6b-2t3" secondAttribute="top" constant="346" id="XQZ-19-Ned"/>
-                            <constraint firstAttribute="leading" secondItem="hgb-w0-cg7" secondAttribute="leading" constant="-128" id="Zb2-sw-rgm"/>
-                            <constraint firstAttribute="bottom" secondItem="hgb-w0-cg7" secondAttribute="bottom" constant="346" id="zIV-D3-RN1"/>
+                            <constraint firstItem="XqP-wr-gej" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="2AU-hm-cme"/>
+                            <constraint firstItem="XqP-wr-gej" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="kbq-8w-Ctx"/>
+                            <constraint firstItem="Kp4-JH-0oC" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="o29-8Y-Wcl"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Kp4-JH-0oC" secondAttribute="bottom" constant="76" id="vk2-py-Qmd"/>
                         </constraints>
                     </view>
                 </viewController>
@@ -40,7 +42,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="AppIcon-1024px" width="1024" height="1024"/>
+        <image name="Logo" width="120" height="120"/>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
